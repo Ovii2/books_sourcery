@@ -2,6 +2,8 @@ package org.example.company.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.company.security.JwtAuthenticationFilter;
+import org.example.company.service.AuthService;
+import org.example.company.service.LogoutService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -25,11 +26,10 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final LogoutHandler logoutHandler;
     private final CorsConfig corsConfig;
+    private final LogoutHandler logoutHandler;
 
     private static final String[] WHITE_LIST_URL = {"/api/auth/register", "/api/auth/login"};
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/api/logout")
+                        logout.logoutUrl("/api/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .clearAuthentication(true)
                                 .invalidateHttpSession(true)
@@ -55,3 +55,4 @@ public class SecurityConfig {
                 .build();
     }
 }
+
