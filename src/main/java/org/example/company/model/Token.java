@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.company.enums.TokenType;
-
 import java.util.UUID;
 
 @Data

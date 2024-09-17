@@ -8,7 +8,6 @@ import org.example.company.dto.register.RegisterResponseDTO;
 import org.example.company.enums.UserRoles;
 import org.example.company.exception.UserAlreadyExistsException;
 import org.example.company.model.User;
-import org.example.company.repository.TokenRepository;
 import org.example.company.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +26,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final Argon2PasswordEncoder passwordEncoder;
-    private final TokenRepository tokenRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final TokenService tokenService;

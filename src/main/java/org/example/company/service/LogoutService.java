@@ -1,11 +1,9 @@
 package org.example.company.service;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.*;
 import org.example.company.repository.TokenRepository;
-import org.example.company.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -17,8 +15,8 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
+
     private final TokenRepository tokenRepository;
-    private final UserRepository userRepository;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

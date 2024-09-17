@@ -1,9 +1,7 @@
 package org.example.company.exception.handler;
 
 
-import org.example.company.exception.UserAlreadyExistsException;
-import org.example.company.exception.UserNotFoundException;
-import org.example.company.exception.UsernameOrPasswordInvalidException;
+import org.example.company.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +24,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameOrPasswordInvalidException.class)
     public ResponseEntity<ErrorDetails> exceptionUsernameOrPasswordInvalidHandler(UsernameOrPasswordInvalidException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage());
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NotAdminException.class)
+    public ResponseEntity<ErrorDetails> exceptionNotAdminHandler(NotAdminException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage());
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<ErrorDetails> exceptionBookNotFoundHandler(BookNotFoundException ex) {
         ErrorDetails errorDetails = new ErrorDetails(ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }

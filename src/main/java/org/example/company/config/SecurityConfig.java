@@ -2,8 +2,6 @@ package org.example.company.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.company.security.JwtAuthenticationFilter;
-import org.example.company.service.AuthService;
-import org.example.company.service.LogoutService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,7 +27,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
     private final LogoutHandler logoutHandler;
 
-    private static final String[] WHITE_LIST_URL = {"/api/auth/register", "/api/auth/login"};
+    private static final String[] WHITE_LIST_URL = {"/api/auth/register", "/api/auth/login", "/api/v1/books"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +35,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers(HttpMethod.POST, "/api/books").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/add/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/books/update/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/books/delete/**").hasRole("ADMIN")
                         .requestMatchers(WHITE_LIST_URL).permitAll()
                         .anyRequest()
                         .authenticated()
