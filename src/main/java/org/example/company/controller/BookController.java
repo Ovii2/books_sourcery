@@ -3,6 +3,8 @@ package org.example.company.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.company.dto.book.BookRequestDTO;
 import org.example.company.dto.book.BookResponseDTO;
+import org.example.company.dto.bookRating.BookRatingRequestDTO;
+import org.example.company.dto.bookRating.BookRatingResponseDTO;
 import org.example.company.exception.BookNotFoundException;
 import org.example.company.exception.NotAdminException;
 import org.example.company.model.Book;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -62,6 +63,16 @@ public class BookController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BookResponseDTO(e.getMessage()));
+        }
+    }
+
+    @PostMapping("/books/rate/{bookId}")
+    public ResponseEntity<BookRatingResponseDTO> rateBook(@PathVariable UUID bookId, @RequestBody BookRatingRequestDTO bookRatingRequestDTO) {
+        try {
+            BookRatingResponseDTO response = bookService.rateBook(bookId, bookRatingRequestDTO.getRating());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BookRatingResponseDTO(e.getMessage()));
         }
     }
 }

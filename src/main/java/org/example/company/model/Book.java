@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -30,7 +31,37 @@ public class Book {
     private Integer year;
 
     @PositiveOrZero(message = "Rating must be zero or a positive number")
-    @Max(value = 5, message = "Raring must not be larger than 5")
+    @Max(value = 5, message = "Rating must not be larger than 5")
     @Column(name = "rating", nullable = false)
-    private Double rating;
+    private Double rating = 0.0;
+
+    @Column(name = "rating_count", nullable = false)
+    private Long ratingCount;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookRating> ratings;
+
+    public void addRating(BookRating bookRating) {
+        ratings.add(bookRating);
+        bookRating.setBook(this);
+        updateRating();
+    }
+
+    public void removeRating(BookRating bookRating) {
+        ratings.remove(bookRating);
+        bookRating.setBook(null);
+        updateRating();
+    }
+
+    private void updateRating() {
+        if (!ratings.isEmpty()) {
+            this.rating = ratings.stream()
+                    .mapToDouble(BookRating::getRating)
+                    .average()
+                    .orElse(0.0);
+        } else {
+            this.rating = 0.0;
+            this.ratingCount = 0L;
+        }
+    }
 }

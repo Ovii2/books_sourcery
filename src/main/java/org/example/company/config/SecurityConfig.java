@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/books/add/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/books/update/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/books/delete/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/rate/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(WHITE_LIST_URL).permitAll()
                         .anyRequest()
                         .authenticated()
