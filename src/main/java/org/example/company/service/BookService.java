@@ -11,6 +11,7 @@ import org.example.company.model.BookRating;
 import org.example.company.model.User;
 import org.example.company.repository.BookRatingRepository;
 import org.example.company.repository.BookRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +31,32 @@ public class BookService {
     private final AuthService authService;
     private final BookRatingRepository bookRatingRepository;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+
+    public List<Book> filterBooks(Optional<String> title, Optional<String> author, Optional<Integer> year, Optional<Double> rating) {
+        Specification<Book> spec = Specification.where(null);
+
+        if (title.isPresent()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(root.get("title"), "%" + title.get() + "%"));
+        }
+        if (author.isPresent()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(root.get("author"), "%" + author.get() + "%"));
+        }
+        if (year.isPresent()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("year"), year.get()));
+        }
+        if (rating.isPresent()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("rating"), rating.get()));
+        }
+
+        return bookRepository.findAll(spec);
     }
 
-    public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
 
+    public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
         if (bookRepository.existsByTitle(bookRequestDTO.getTitle())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book with this title already exists");
         }
@@ -45,6 +66,7 @@ public class BookService {
                 .author(bookRequestDTO.getAuthor())
                 .year(bookRequestDTO.getYear())
                 .rating(0.00)
+                .ratingCount(0L)
                 .build();
 
         bookRepository.save(book);

@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -25,8 +26,12 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/books")
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    public List<Book> getBooks(
+            @RequestParam Optional<String> title,
+            @RequestParam Optional<String> author,
+            @RequestParam Optional<Integer> year,
+            @RequestParam Optional<Double> rating) {
+        return bookService.filterBooks(title, author, year, rating);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
