@@ -56,11 +56,14 @@ public class AuthService {
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword()));
+
         User user = userRepository.findUserByUsername(loginRequestDTO.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         String jwtToken = jwtService.generateToken(user);
         tokenService.revokeAllUserTokens(user);
         tokenService.saveUserToken(user, jwtToken);
+
         return LoginResponseDTO.builder()
                 .token(jwtToken)
                 .message("User logged in successfully")
@@ -80,6 +83,9 @@ public class AuthService {
         if (password == null || password.isEmpty() || password.isBlank()) {
             throw new IllegalArgumentException("Password cannot be empty or blank");
         }
+        if (password.length() < minLength) {
+            throw new IllegalArgumentException(String.format("Password must be at least %d characters long", minLength));
+        }
         if (!Pattern.matches(".*[A-Z].*", password)) {
             throw new IllegalArgumentException("Password must include at least one uppercase letter");
         }
@@ -88,9 +94,6 @@ public class AuthService {
         }
         if (!Pattern.matches(".*\\d.*", password)) {
             throw new IllegalArgumentException("Password must include at least one number");
-        }
-        if (password.length() < minLength) {
-            throw new IllegalArgumentException(String.format("Password must be at least %d characters long %n", minLength));
         }
     }
 
@@ -102,10 +105,10 @@ public class AuthService {
             throw new IllegalArgumentException("Username cannot be empty!");
         }
         if (username.length() < min) {
-            throw new IllegalArgumentException(String.format("Username must be at least %d characters %n", min));
+            throw new IllegalArgumentException(String.format("Username must be at least %d characters", min));
         }
         if (username.length() > max) {
-            throw new IllegalArgumentException(String.format("Username cannot be longer than %d characters %n", max));
+            throw new IllegalArgumentException(String.format("Username cannot be longer than %d characters", max));
         }
         if (username.startsWith(" ") || username.endsWith(" ")) {
             throw new IllegalArgumentException("Username cannot start or end with a space");

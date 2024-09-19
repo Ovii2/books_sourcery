@@ -33,10 +33,4 @@ public class RegisterRequestDTO {
     @Enumerated(EnumType.STRING)
     @NotNull
     private UserRoles role;
-
-    public RegisterRequestDTO(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 }
