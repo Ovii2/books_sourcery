@@ -2,6 +2,7 @@ package org.example.company;
 
 import org.example.company.dto.register.RegisterRequestDTO;
 import org.example.company.dto.register.RegisterResponseDTO;
+import org.example.company.enums.UserRoles;
 import org.example.company.exception.UserAlreadyExistsException;
 import org.example.company.model.User;
 import org.example.company.repository.UserRepository;
