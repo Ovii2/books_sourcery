@@ -2,10 +2,7 @@ package org.example.company.dto.register;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,16 +15,19 @@ import org.example.company.enums.UserRoles;
 @NoArgsConstructor
 public class RegisterRequestDTO {
 
-    @NotBlank(message = "Username is mandatory")
-    @Size(min = 4, max = 20, message = "Username must be between %d and %d characters")
+    @NotNull(message = "Username is mandatory")
+    @NotEmpty(message = "Username cannot be empty")
+    @NotBlank(message = "Username cannot start or end with a space")
+    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters long")
     private String username;
 
-    @Email(message = "Email should be valid")
+    @Email(message = "Email is not valid",
+            regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     @NotBlank(message = "Email is mandatory")
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, message = "Password must be at least %d characters long")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
     @Enumerated(EnumType.STRING)

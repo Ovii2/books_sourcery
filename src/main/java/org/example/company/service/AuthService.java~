@@ -41,6 +41,7 @@ public class AuthService {
 
         validatePassword(registerRequestDTO.getPassword());
 
+
         User user = User.builder()
                 .username(registerRequestDTO.getUsername())
                 .email(registerRequestDTO.getEmail())

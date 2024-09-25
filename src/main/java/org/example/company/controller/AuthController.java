@@ -1,5 +1,6 @@
 package org.example.company.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.company.dto.login.LoginRequestDTO;
 import org.example.company.dto.login.LoginResponseDTO;
@@ -21,10 +22,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> registerUser(@RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity<RegisterResponseDTO> registerUser(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
         try {
             RegisterResponseDTO response = authService.register(registerRequestDTO);
-            return ResponseEntity.ok(response);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new RegisterResponseDTO(e.getMessage()));
         } catch (IllegalArgumentException e) {
