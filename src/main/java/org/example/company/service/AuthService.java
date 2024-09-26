@@ -18,7 +18,6 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +37,6 @@ public class AuthService {
         if (userRepository.existsUserByUsername(registerRequestDTO.getUsername())) {
             throw new UserAlreadyExistsException("This username already exists!");
         }
-
-        validatePassword(registerRequestDTO.getPassword());
 
         User user = User.builder()
                 .username(registerRequestDTO.getUsername())
@@ -65,27 +62,6 @@ public class AuthService {
                 .token(jwtToken)
                 .message("User logged in successfully")
                 .build();
-    }
-
-
-    public void validatePassword(String password) {
-        int minLength = 8;
-
-        if (password == null || password.isEmpty() || password.isBlank()) {
-            throw new IllegalArgumentException("Password cannot be empty or blank");
-        }
-        if (password.length() < minLength) {
-            throw new IllegalArgumentException(String.format("Password must be at least %d characters long", minLength));
-        }
-        if (!Pattern.matches(".*[A-Z].*", password)) {
-            throw new IllegalArgumentException("Password must include at least one uppercase letter");
-        }
-        if (!Pattern.matches(".*[a-z].*", password)) {
-            throw new IllegalArgumentException("Password must include at least one lowercase letter");
-        }
-        if (!Pattern.matches(".*\\d.*", password)) {
-            throw new IllegalArgumentException("Password must include at least one number");
-        }
     }
 
 

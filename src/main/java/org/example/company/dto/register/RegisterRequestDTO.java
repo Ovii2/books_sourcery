@@ -27,6 +27,10 @@ public class RegisterRequestDTO {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
+    @Pattern(message = "Password must include at least one uppercase letter", regexp = ".*[A-Z].*")
+    @Pattern(message = "Password must include at least one lowercase letter", regexp = ".*[a-z].*")
+    @Pattern(message = "Password must include at least one number", regexp = ".*\\d.*")
+    @Pattern(message = "Password must include at least one special character @,$,!,%,*,?,&,#,^", regexp = ".*[@$!%*?&#^].*")
     @Size(min = 8, message = "Password must be at least {min} characters long")
     private String password;
 
