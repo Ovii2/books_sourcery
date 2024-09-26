@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Editor Backup Files ###
+*~
+
 # Compiled class file
 *.class
 
