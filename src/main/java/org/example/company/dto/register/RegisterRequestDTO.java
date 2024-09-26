@@ -18,7 +18,7 @@ public class RegisterRequestDTO {
     @NotNull(message = "Username is mandatory")
     @NotEmpty(message = "Username cannot be empty")
     @NotBlank(message = "Username cannot start or end with a space")
-    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters long")
+    @Size(min = 4, max = 20, message = "Username must be between {min} and {max} characters long")
     private String username;
 
     @Email(message = "Email is not valid",
@@ -27,7 +27,7 @@ public class RegisterRequestDTO {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Size(min = 8, message = "Password must be at least {min} characters long")
     private String password;
 
     @Enumerated(EnumType.STRING)
