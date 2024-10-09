@@ -7,6 +7,7 @@ import org.example.company.dto.login.LoginResponseDTO;
 import org.example.company.dto.register.RegisterRequestDTO;
 import org.example.company.dto.register.RegisterResponseDTO;
 import org.example.company.exception.UserAlreadyExistsException;
+import org.example.company.exception.UserAlreadyLoggedInException;
 import org.example.company.exception.UserNotFoundException;
 import org.example.company.exception.UsernameOrPasswordInvalidException;
 import org.example.company.service.AuthService;
@@ -38,6 +39,8 @@ public class AuthController {
         try {
             LoginResponseDTO loggedUser = authService.login(loginRequestDTO);
             return ResponseEntity.ok(loggedUser);
+        } catch (UserAlreadyLoggedInException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new LoginResponseDTO(e.getMessage()));
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new LoginResponseDTO(e.getMessage()));
         } catch (UsernameOrPasswordInvalidException e) {

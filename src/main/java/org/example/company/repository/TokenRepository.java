@@ -3,6 +3,7 @@ package org.example.company.repository;
 import org.example.company.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,9 @@ public interface TokenRepository extends JpaRepository<Token, UUID> {
             WHERE u.id = :userID AND (t.isExpired = FALSE OR t.isRevoked = FALSE)
             """)
     List<Token> findAllValidTokensByUser(UUID userID);
+
+    @Query("SELECT t FROM Token t WHERE t.user.id = :userId AND (t.isExpired = false AND t.isRevoked = false)")
+    List<Token> findAllValidTokensByUserId(@Param("userId") UUID userId);
 
     Optional<Token> findByToken(String token);
 

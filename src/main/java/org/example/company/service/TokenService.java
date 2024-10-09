@@ -9,6 +9,8 @@ import org.example.company.repository.TokenRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TokenService {
@@ -45,6 +47,10 @@ public class TokenService {
         if (!validTokens.isEmpty()) {
             tokenRepository.deleteAll(validTokens);
         }
+    }
+
+    public List<Token> getAllValidUserTokens(User user) {
+        return tokenRepository.findAllValidTokensByUserId(user.getId());
     }
 
     public String getCurrentToken() {
