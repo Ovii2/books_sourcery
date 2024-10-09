@@ -53,9 +53,8 @@ public class AuthService {
 
         User user = userRepository.findUserByUsername(loginRequestDTO.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+        tokenService.deleteAllValidUserTokens(user);
         String jwtToken = jwtService.generateToken(user);
-        tokenService.revokeAllUserTokens(user);
         tokenService.saveUserToken(user, jwtToken);
 
         return LoginResponseDTO.builder()

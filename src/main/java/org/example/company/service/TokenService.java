@@ -40,6 +40,13 @@ public class TokenService {
         tokenRepository.saveAll(validUserTokens);
     }
 
+    public void deleteAllValidUserTokens(User user) {
+        var validTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        if (!validTokens.isEmpty()) {
+            tokenRepository.deleteAll(validTokens);
+        }
+    }
+
     public String getCurrentToken() {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
