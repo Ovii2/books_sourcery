@@ -42,10 +42,10 @@ public class TokenService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void deleteAllValidUserTokens(User user) {
-        var validTokens = tokenRepository.findAllValidTokensByUser(user.getId());
-        if (!validTokens.isEmpty()) {
-            tokenRepository.deleteAll(validTokens);
+    public void deleteAllUserTokens(User user) {
+        var allUserTokens = tokenRepository.findAllByUserId(user.getId());
+        if (!allUserTokens.isEmpty()) {
+            tokenRepository.deleteAll(allUserTokens);
         }
     }
 

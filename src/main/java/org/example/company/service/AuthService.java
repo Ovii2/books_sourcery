@@ -62,7 +62,7 @@ public class AuthService {
            throw new UserAlreadyLoggedInException("You are already logged in");
         }
 
-        tokenService.deleteAllValidUserTokens(user);
+        tokenService.deleteAllUserTokens(user);
         String jwtToken = jwtService.generateToken(user);
         tokenService.saveUserToken(user, jwtToken);
 
